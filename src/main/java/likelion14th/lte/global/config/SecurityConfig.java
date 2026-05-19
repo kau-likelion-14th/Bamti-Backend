@@ -1,6 +1,6 @@
 package likelion14th.lte.global.config;
 
-import likelion14th.lte.login.jwt.JwtValidationFilter;
+//import likelion14th.lte.login.jwt.JwtValidationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
