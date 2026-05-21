@@ -15,6 +15,6 @@ public class RootController {
     })
     @GetMapping("/health")
     public String healthCheck() {
-        return "OK";
+        return "OK!";
     }
 }
