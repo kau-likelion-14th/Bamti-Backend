@@ -18,7 +18,6 @@ import likelion14th.lte.user.entity.User;
 import likelion14th.lte.user.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.web.error.Error;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

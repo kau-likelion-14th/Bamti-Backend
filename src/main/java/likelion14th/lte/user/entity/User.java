@@ -3,6 +3,7 @@ package likelion14th.lte.user.entity;
 import jakarta.persistence.*;
 import likelion14th.lte.Entity.BaseEntity;
 import likelion14th.lte.follow.entity.Follow;
+import likelion14th.lte.statistic.entity.Statistic;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,19 +37,25 @@ public class User extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String s3ImageKey;
 
-    @OneToMany(mappedBy = "toUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true )
-    private List<Follow> followers;
+    // 나를 팔로우하는 사람들 (toUser = 나)
+    @OneToMany(mappedBy = "toUser")
+    private List<Follow> followers = new ArrayList<>();
 
-    @OneToMany(mappedBy = "fromUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true )
-    private List<Follow> followings;
+    // 내가 팔로우하는 사람들 (fromUser = 나)
+    @OneToMany(mappedBy = "fromUser")
+    private List<Follow> followings = new ArrayList<>();
+
+    // User 생성 시 Statistic 자동 생성 (CascadeType.ALL로 함께 저장)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "statistic_id")
+    private Statistic statistic;
 
     @Builder(access = AccessLevel.PUBLIC)
-    private User (String username, String userTag, String introduction) {
+    private User(String username, String userTag, String introduction) {
         this.username = username;
         this.userTag = userTag;
         this.introduction = introduction;
-        this.followers = new ArrayList<>();
-        this.followings = new ArrayList<>();
+        this.statistic = Statistic.create();
     }
 
     public void updateIntroduction(String introduction) {
