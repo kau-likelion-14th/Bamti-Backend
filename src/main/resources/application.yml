@@ -44,3 +44,8 @@ spring:
 Logging:
   level:
     org.hibernate.type.descriptor.sql.BasicBinder: trace
+
+# YouTube Data API
+youtube:
+  api-key: ${YOUTUBE_API_KEY}
+  api-base: https://www.googleapis.com/youtube/v3

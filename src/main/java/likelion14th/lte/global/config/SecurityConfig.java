@@ -43,7 +43,9 @@ public class SecurityConfig {
                                 "/v3/api-docs/**",
                                 "/swagger-resources/**",
 
-                                "/health"
+                                "/health",
+
+                                "/api/youtube/**"
 
                         ).permitAll()
                         .anyRequest().authenticated()
