@@ -2,7 +2,6 @@ package likelion14th.lte.follow.repository;
 
 import likelion14th.lte.follow.entity.Follow;
 import likelion14th.lte.user.entity.User;
-import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
