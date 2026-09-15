@@ -34,18 +34,38 @@ spring:
     password: ${LOCAL_DB_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
-    show-sql : true
+    show-sql: true
     hibernate:
       ddl-auto: update
-  properties:
-    hibernate:
-      dialect: org.hibernate.dialect.MySQLDialect
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
 
-Logging:
+logging:
   level:
-    org.hibernate.type.descriptor.sql.BasicBinder: trace
+    org.hibernate.orm.jdbc.bind: trace
 
 # YouTube Data API
 youtube:
   api-key: ${YOUTUBE_API_KEY}
   api-base: https://www.googleapis.com/youtube/v3
+
+# Kakao OAuth
+kakao:
+  client-id: ${KAKAO_REST_API_KEY}
+  client-secret: ${KAKAO_CLIENT_SECRET}
+  redirect-uri: ${KAKAO_REDIRECT_URI:http://localhost:3000/login/oauth2/code/kakao}
+  token-uri: https://kauth.kakao.com/oauth/token
+  user-info-uri: https://kapi.kakao.com/v2/user/me
+
+# JWT
+jwt:
+  secret: ${JWT_SECRET}
+  access-exp-ms: ${JWT_EXPIRATION:3600000}
+  refresh-exp-ms: ${JWT_REFRESH_EXPIRATION:1209600000}
+
+# Refresh Token Cookie
+auth:
+  cookie:
+    secure: ${AUTH_COOKIE_SECURE:false}
+    same-site: ${AUTH_COOKIE_SAME_SITE:Lax}

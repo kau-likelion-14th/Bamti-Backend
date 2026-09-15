@@ -3,6 +3,7 @@ package likelion14th.lte.user.entity;
 import jakarta.persistence.*;
 import likelion14th.lte.Entity.BaseEntity;
 import likelion14th.lte.follow.entity.Follow;
+import likelion14th.lte.login.domain.RefreshToken;
 import likelion14th.lte.youtube.domain.SavedSong;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -22,6 +23,10 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Kakao 사용자 id
+    @Column(unique = true)
+    private String providerId;
+
     @Column(nullable = false)
     private String username;
 
@@ -37,17 +42,21 @@ public class User extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String s3ImageKey;
 
-    @OneToMany(mappedBy = "toUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true )
+    @OneToMany(mappedBy = "toUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Follow> followers;
 
-    @OneToMany(mappedBy = "fromUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true )
+    @OneToMany(mappedBy = "fromUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Follow> followings;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SavedSong> savedSongs;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private RefreshToken refreshToken;
+
     @Builder(access = AccessLevel.PUBLIC)
-    private User (String username, String userTag, String introduction) {
+    private User(String providerId, String username, String userTag, String introduction) {
+        this.providerId = providerId;
         this.username = username;
         this.userTag = userTag;
         this.introduction = introduction;
@@ -58,5 +67,10 @@ public class User extends BaseEntity {
 
     public void updateIntroduction(String introduction) {
         this.introduction = introduction;
+    }
+
+    // [추가] 로그아웃 시 연관관계 끊기 -> orphanRemoval로 refresh_token Row 삭제
+    public void removeRefreshToken() {
+        this.refreshToken = null;
     }
 }
