@@ -1,6 +1,7 @@
 package likelion14th.lte.follow.service;
 
 
+import likelion14th.lte.user.entity.User;
 import org.springframework.transaction.annotation.Transactional;
 import likelion14th.lte.follow.dto.FollowUserResponse;
 import likelion14th.lte.follow.dto.UserNameDto;
@@ -8,7 +9,6 @@ import likelion14th.lte.follow.entity.Follow;
 import likelion14th.lte.follow.repository.FollowRepository;
 import likelion14th.lte.global.api.ErrorCode;
 import likelion14th.lte.global.exception.GeneralException;
-import likelion14th.lte.user.entity.User;
 import likelion14th.lte.user.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
