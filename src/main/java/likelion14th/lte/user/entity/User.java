@@ -3,6 +3,8 @@ package likelion14th.lte.user.entity;
 import jakarta.persistence.*;
 import likelion14th.lte.Entity.BaseEntity;
 import likelion14th.lte.follow.entity.Follow;
+import likelion14th.lte.login.domain.RefreshToken;
+import likelion14th.lte.youtube.domain.SavedSong;
 import likelion14th.lte.statistic.entity.Statistic;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -22,6 +24,10 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Kakao 사용자 id
+    @Column(unique = true)
+    private String providerId;
+
     @Column(nullable = false)
     private String username;
 
@@ -37,28 +43,40 @@ public class User extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String s3ImageKey;
 
-    // 나를 팔로우하는 사람들 (toUser = 나)
-    @OneToMany(mappedBy = "toUser")
-    private List<Follow> followers = new ArrayList<>();
+    @OneToMany(mappedBy = "toUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Follow> followers;
 
-    // 내가 팔로우하는 사람들 (fromUser = 나)
-    @OneToMany(mappedBy = "fromUser")
-    private List<Follow> followings = new ArrayList<>();
-
+    @OneToMany(mappedBy = "fromUser", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Follow> followings;
     // User 생성 시 Statistic 자동 생성 (CascadeType.ALL로 함께 저장)
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "statistic_id")
     private Statistic statistic;
 
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SavedSong> savedSongs;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private RefreshToken refreshToken;
+
     @Builder(access = AccessLevel.PUBLIC)
-    private User(String username, String userTag, String introduction) {
+    private User(String providerId, String username, String userTag, String introduction) {
+        this.providerId = providerId;
         this.username = username;
         this.userTag = userTag;
         this.introduction = introduction;
         this.statistic = Statistic.create();
+        this.followers = new ArrayList<>();
+        this.followings = new ArrayList<>();
+        this.savedSongs = new ArrayList<>();
     }
 
     public void updateIntroduction(String introduction) {
         this.introduction = introduction;
+    }
+
+    // [추가] 로그아웃 시 연관관계 끊기 -> orphanRemoval로 refresh_token Row 삭제
+    public void removeRefreshToken() {
+        this.refreshToken = null;
     }
 }

@@ -9,6 +9,8 @@ import likelion14th.lte.user.service.UserProfileService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,18 +23,19 @@ public class UserProfileController {
     @GetMapping
     @Operation(summary = "유저 프로칠 조회", description = "유저 아이디를 받아 유저 프로필을 받아오는 api입니다.")
     public ApiResponse<UserProfileResponse> getUserProfile(
-            @RequestParam Long userId
+            @AuthenticationPrincipal Jwt jwt
     ) {
+        Long userId = Long.valueOf(jwt.getSubject());
         UserProfileResponse userProfileResponse = userProfileService.getUserProfile(userId);
 
         return ApiResponse.onSuccess(SuccessCode.OK, userProfileResponse);
     }
-        @PostMapping
-        @Operation(summary = "테스트 유저를 생성", description = "이름, 한 줄 소개")
-        public ApiResponse<UserProfileResponse> createTestUserProfile(
-                @RequestBody CreateTestUserRequest createTestUserRequest
-        ){
-            UserProfileResponse response = userProfileService.createTestUser(createTestUserRequest);
-            return ApiResponse.onSuccess(SuccessCode.CREATED, response);
-        }
+    @PostMapping
+    @Operation(summary = "테스트 유저를 생성", description = "이름, 한 줄 소개")
+    public ApiResponse<UserProfileResponse> createTestUserProfile(
+            @RequestBody CreateTestUserRequest createTestUserRequest
+    ){
+        UserProfileResponse response = userProfileService.createTestUser(createTestUserRequest);
+        return ApiResponse.onSuccess(SuccessCode.CREATED, response);
     }
+}
