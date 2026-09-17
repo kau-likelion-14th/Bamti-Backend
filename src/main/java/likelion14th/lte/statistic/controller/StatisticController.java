@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 
 @RestController
 @RequestMapping("api/statistic")
@@ -24,8 +26,9 @@ public class StatisticController {
     @GetMapping
     @Operation(summary = "통계 조회", description = "유저의 통계를 조회합니다.")
     public ApiResponse<StatisticResponse> getStatistic(
-            @RequestParam Long userId
+            @AuthenticationPrincipal Jwt jwt
     ) {
+        Long userId = Long.valueOf(jwt.getSubject());
         StatisticResponse response = statisticService.getStatistic(userId);
         return ApiResponse.onSuccess(SuccessCode.STATISTICS_GET_SUCCESS, response);
     }
