@@ -1,5 +1,6 @@
 package likelion14th.lte.user.controller;
 
+import org.springframework.security.oauth2.jwt.Jwt;
 import io.swagger.v3.oas.annotations.Operation;
 import likelion14th.lte.global.api.ApiResponse;
 import likelion14th.lte.global.api.SuccessCode;
@@ -11,7 +12,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.web.accept.ApiVersionResolver;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.http.MediaType;
 
 @RestController
 @Slf4j
@@ -37,5 +41,18 @@ public class UserProfileController {
     ){
         UserProfileResponse response = userProfileService.createTestUser(createTestUserRequest);
         return ApiResponse.onSuccess(SuccessCode.CREATED, response);
+    }
+
+    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "유저 프로필 추가 및 수정", description = "유저 프로필 이미지를 추가하거나 수정합니다.")
+    public ApiResponse<UserProfileResponse> putUserProfile(
+            @AuthenticationPrincipal Jwt jwt,
+            @RequestParam("image") MultipartFile file
+    ){
+        Long userId = Long.valueOf(jwt.getSubject());
+
+
+        UserProfileResponse response = userProfileService.putProfileImage(userId, file);
+        return ApiResponse.onSuccess(SuccessCode.PROFILE_PUT_SUCCESS, response);
     }
 }
