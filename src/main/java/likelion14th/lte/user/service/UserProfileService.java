@@ -2,6 +2,7 @@ package likelion14th.lte.user.service;
 
 import likelion14th.lte.global.api.ErrorCode;
 import likelion14th.lte.global.exception.GeneralException;
+import likelion14th.lte.user.dto.request.UserIntroRequest;
 import likelion14th.lte.user.dto.request.CreateTestUserRequest;
 import likelion14th.lte.user.dto.response.UserProfileResponse;
 import likelion14th.lte.user.entity.User;
@@ -47,6 +48,32 @@ public class UserProfileService {
     public UserProfileResponse getUserProfile(Long userId){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND));
+        return UserProfileResponse.from(user);
+    }
+
+    @Transactional
+    public UserProfileResponse deleteProfileImage(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND));
+
+        // 이미지가 있을 때만 S3에서 삭제. 없으면 그냥 성공 처리
+        if (user.getS3ImageKey() != null) {
+            try {
+                s3Utils.deleteFile(user.getS3ImageKey());
+            } catch (UtilException e) {
+                throw GeneralException.of(mapToErrorCode(e.getReason()));
+            }
+        }
+        user.fixUserProfile(null, null);
+        return UserProfileResponse.from(user);
+    }
+
+    @Transactional
+    public UserProfileResponse updateIntroduction(Long userId, UserIntroRequest request) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new GeneralException(ErrorCode.USER_NOT_FOUND));
+
+        user.updateIntroduction(request.getIntroduce());
         return UserProfileResponse.from(user);
     }
     @Transactional
