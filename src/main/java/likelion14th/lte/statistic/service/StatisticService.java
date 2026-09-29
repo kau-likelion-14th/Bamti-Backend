@@ -3,7 +3,7 @@ package likelion14th.lte.statistic.service;
 import jakarta.persistence.EntityManager;
 import likelion14th.lte.global.api.ErrorCode;
 import likelion14th.lte.global.exception.GeneralException;
-import likelion14th.lte.statistic.dto.StatisticResponse;
+import likelion14th.lte.statistic.dto.response.StatisticResponse;
 import likelion14th.lte.statistic.entity.Statistic;
 import likelion14th.lte.todo.repository.TodoDateRepository;
 import likelion14th.lte.user.entity.User;

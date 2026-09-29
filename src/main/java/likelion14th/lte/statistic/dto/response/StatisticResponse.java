@@ -1,4 +1,4 @@
-package likelion14th.lte.statistic.dto;
+package likelion14th.lte.statistic.dto.response;
 
 import likelion14th.lte.statistic.entity.Statistic;
 import likelion14th.lte.todo.entity.WeekEnum;
