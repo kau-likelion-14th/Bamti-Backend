@@ -8,7 +8,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserProfileResponse {
-    private String Username;
+    private String username;
     private String profileImageUrl;
     private String introduction;
 

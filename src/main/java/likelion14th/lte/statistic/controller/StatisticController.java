@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import likelion14th.lte.global.api.ApiResponse;
 import likelion14th.lte.global.api.SuccessCode;
-import likelion14th.lte.statistic.dto.StatisticResponse;
+import likelion14th.lte.statistic.dto.response.StatisticResponse;
 import likelion14th.lte.statistic.service.StatisticService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

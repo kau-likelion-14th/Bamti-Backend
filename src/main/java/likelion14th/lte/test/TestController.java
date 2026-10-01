@@ -1,4 +1,4 @@
-package likelion14th.lte;
+package likelion14th.lte.test;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
