@@ -38,7 +38,7 @@ public class SecurityConfig {
                                 "/login/oauth2/**",
                                 "/api/auth/kakao",
                                 "/api/auth/reissue",
-                                "/api/youtube/**",
+                                "/api/youtube/search",
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",
                                 "/v3/api-docs/**",
